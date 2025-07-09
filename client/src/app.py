@@ -11,6 +11,7 @@ def main(page: ft.Page):
     page.title = "Activity tracker"
     timer_running = True
     
+    # lv.controls.append(Window.get_active_title())
 
     def update_timer():
         while timer_running:
@@ -19,7 +20,13 @@ def main(page: ft.Page):
             page.update()
 
     def add_active_window_title():
-        lv.controls.append(ft.Text(Window.get_active_title()))
+        if (len(lv.controls) == 0):
+            lv.controls.append(ft.Text(Window.get_active_title()))    
+        elif (lv.controls[-1].value != Window.get_active_title()):
+            lv.controls.append(ft.Text(Window.get_active_title()))
+        else:
+            pass
+        
 
     page.add(lv)
 
