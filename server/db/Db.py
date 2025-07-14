@@ -11,8 +11,9 @@ class Database:
             """
                         CREATE TABLE IF NOT EXISTS apps (
                         id INT ,
-                        time TEXT,
-                        title TEXT,
+                        time TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        date TEXT NOT NULL,
                         PRIMARY KEY (id)
                         )
                         """
@@ -20,18 +21,19 @@ class Database:
         conn.cur.execute(
             """
                         CREATE TABLE IF NOT EXISTS time_calculation (
-                        id INT ,
-                        time TEXT,
-                        title TEXT,
+                        id INT,
+                        time TEXT NOT NULL,
+                        title TEXT NOT NULL,
                         PRIMARY KEY (id)
                         )
                         """
         )
 
     def insert_session_info(self, time: str, title: str):
+        """Insert time into apps tabel"""
         try:
             conn.cur.execute(
-                "INSERT INTO time_calculation(time, title) VALUES(?, ?)", [time, title]
+                "INSERT INTO apps(time, title) VALUES(?, ?)", [time, title]
             )
             conn.conn.commit()
             print("inserted successfully")
@@ -39,6 +41,7 @@ class Database:
             print(e)
 
     def insert_time_calculation_session_info(self, time: datetime, title: str):
+        """Insert time calculation data into time_calculation tabel"""
         try:
             conn.cur.execute(
                 "INSERT INTO time_calculation(time, title) VALUES(?, ?)", [time, title]
@@ -48,7 +51,8 @@ class Database:
         except sqlite3.Error as e:
             print(e)
 
-    def get_total_time(self):
+    def calculate_time_difference(self):
+        """Calculate the time difference, after process change"""
         try:
             conn.cur.execute(
                 "SELECT time FROM time_calculation ORDER BY time"
@@ -60,21 +64,19 @@ class Database:
                 times[0][0]
             )
         except sqlite3.Error as e:
-            raise print(f"Error at class: Db method: get_total_time -> {e}")
+            raise print(f"Error at class: Db method: calculate_time_difference -> {e}")
+    def insert_session_time():
+        pass
 
 
 Db = Database()
 
 
-Db.insert_session_info(datetime(2025, 7, 9, 10, 30, 0), "Maincraft")
+Db.insert_session_info(datetime(2025, 7, 14, 9, 30, 0), "Maincraft")
 Db.insert_session_info(datetime.now(), "Maincraft")
 
-total_duration = Db.get_total_time()
+total_duration = Db.calculate_time_difference()
 
-print(total_duration)
+print(f"total_duration: {total_duration}")
 
-# Format the timedelta for human readability
-if total_duration:
-    formatted_duration = str(total_duration).split(".")[0]  # Show days and larger units
-else:
-    formatted_duration = str(total_duration)  # Show hours, minutes, seconds
+

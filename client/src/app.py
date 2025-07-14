@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 from tracker.Tracker import Window
 import threading
@@ -9,6 +10,7 @@ def main(page: ft.Page):
     lv = ft.ListView(expand=1, padding=20, spacing=10, auto_scroll=True)
     page.title = "Activity tracker"
     timer_running = True
+    count_time = datetime.now()
 
 
     def update_timer():
@@ -18,11 +20,18 @@ def main(page: ft.Page):
             page.update()
 
     def add_active_window_title():
+        nonlocal count_time
         app_title = Window.get_active_title()
         if (len(lv.controls) == 0):
-            lv.controls.append(ft.Text(app_title))    
+            current_time = datetime.now() - count_time
+            lv.controls.append(ft.Text(app_title))   
+            print(app_title, current_time)
+            count_time = datetime.now()
         elif (lv.controls[-1].value != app_title):
+            current_time = datetime.now() - count_time
             lv.controls.append(ft.Text(app_title))
+            print(lv.controls[-2].value, current_time)
+            count_time = datetime.now()
         else:
             pass
         
