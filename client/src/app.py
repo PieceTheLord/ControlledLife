@@ -40,29 +40,33 @@ class ActivityTracker:
             self.lv.controls.append(ft.Text(f"{self.titles_list[-1]} {current_time}"))
             self.titles_list.append(active_app_title)
             self.count_time = datetime.now()
+            print("Origin:", self.lv.controls)
 
 
 def main(page: ft.Page):
     tracker = ActivityTracker(page)
-    test = Window_methods(page)
-    test.start_tracking()
+    test = Window_methods(page, tracker)
     tracker.start_tracking()
+    test.start_tracking()
 
 
 class Window_methods(ActivityTracker):
-    def __init__(self, page: ft.Page):
-        super().__init__(page=page)
+    def __init__(self, page: ft.Page, tracker: ActivityTracker):
+        self.tracker = tracker
 
     def start_tracking(self):
         thread = threading.Thread(target=self.update_timer, daemon=True)
         thread.start()
 
     def update_timer(self):
-        prev = self.titles_list
+        time.sleep(0.001)
         while True:
             time.sleep(1)
-            if self.lv.controls:
-                print(self.lv.controls)
+            try:
+                print(self.tracker.lv.controls)
+            except Exception as e:
+                print("Occured an errro ->", e)
+            
 
 
 
