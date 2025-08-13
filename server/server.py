@@ -1,3 +1,4 @@
+import time
 from fastapi import FastAPI
 from .db.Db import Db
 
@@ -17,9 +18,12 @@ async def total_time():
 
 # Post requests
 
-@app.post('insert_session_info/{time}/{title}')
-async def insert_session_info(time: str, title: str):
-  Db.insert_session_info(time, title)
+@app.post('insert_session_info/{title}')
+async def insert_session_info(title: str):
+  time = time.now()
+  print(time, title)
+  
+  # Db.insert_session_info(time, title)
 
 
 

@@ -47,21 +47,21 @@ Db = Database()
 
 
 
-Db.insert_session_info(
-  datetime.datetime.now(),
-  'Maincraft'
-)
-Db.insert_session_info(
-  datetime.datetime.now(),
-  'Maincraft'
-)
+# Db.insert_session_info(
+#   datetime.datetime.now(),
+#   'Maincraft'
+# )
+# Db.insert_session_info(
+#   datetime.datetime.now(),
+#   'Maincraft'
+# )
 
-total_duration = Db.get_total_time()
+# total_duration = Db.get_total_time()
 
-# Format the timedelta for human readability
-if total_duration:
-    formatted_duration = str(total_duration).split(".")[0]  # Show days and larger units
-else:
-    formatted_duration = str(total_duration)  # Show hours, minutes, seconds
+# # Format the timedelta for human readability
+# if total_duration:
+#     formatted_duration = str(total_duration).split(".")[0]  # Show days and larger units
+# else:
+#     formatted_duration = str(total_duration)  # Show hours, minutes, seconds
 
-print(f"Total duration: {formatted_duration}")
+# print(f"Total duration: {formatted_duration}")

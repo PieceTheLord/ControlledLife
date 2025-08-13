@@ -1,4 +1,5 @@
-import sqlite3 
+import sqlite3
+
 
 class Connection:
   def __init__(self):
