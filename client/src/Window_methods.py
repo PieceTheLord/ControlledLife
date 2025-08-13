@@ -4,8 +4,8 @@ import time
 import app
 
 class Window_methods(app.ActivityTracker):
-    def __init__(self, page: ft.Page, tracker: app.ActivityTracker):
-        self.tracker = tracker
+    def __init__(self, page: ft.Page, ui: app.ActivityTrackertUI):
+        self.ui = ui
 
     def start_tracking(self):
         thread = threading.Thread(target=self.update_timer, daemon=True)
@@ -16,6 +16,6 @@ class Window_methods(app.ActivityTracker):
         while True:
             time.sleep(1)
             try:
-                print(self.tracker.lv.controls)
+                print(self.ui.lv.controls)
             except Exception as e:
                 print("Occured an errro ->", e)
