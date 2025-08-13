@@ -4,7 +4,7 @@ import time
 from datetime import datetime
 from tracker.Tracker import Window  # Assuming this is your Window class
 from utils.time_divider import parse_string  # Assuming this is your utility
-
+import Window_methods
 
 
 
@@ -45,29 +45,9 @@ class ActivityTracker:
 
 def main(page: ft.Page):
     tracker = ActivityTracker(page)
-    test = Window_methods(page, tracker)
+    test = Window_methods.Window_methods(page, tracker)
     tracker.start_tracking()
     test.start_tracking()
-
-
-class Window_methods(ActivityTracker):
-    def __init__(self, page: ft.Page, tracker: ActivityTracker):
-        self.tracker = tracker
-
-    def start_tracking(self):
-        thread = threading.Thread(target=self.update_timer, daemon=True)
-        thread.start()
-
-    def update_timer(self):
-        time.sleep(0.001)
-        while True:
-            time.sleep(1)
-            try:
-                print(self.tracker.lv.controls)
-            except Exception as e:
-                print("Occured an errro ->", e)
-            
-
 
 
 if __name__ == "__main__":
