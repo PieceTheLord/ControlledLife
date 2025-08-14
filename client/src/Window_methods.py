@@ -1,10 +1,12 @@
 import flet as ft
 import threading
 import time
-import app
 
-class Window_methods(app.ActivityTracker):
-    def __init__(self, page: ft.Page, ui: app.ActivityTrackertUI):
+from imports import ActivityTrackerUI, ActivityTracker
+
+
+class Window_methods(ActivityTracker):
+    def __init__(self, page: ft.Page, ui: ActivityTrackerUI):
         self.ui = ui
 
     def start_tracking(self):
