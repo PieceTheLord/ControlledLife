@@ -1,5 +1,5 @@
 from datetime import datetime
-from Connection import conn
+from .Connection import conn
 import sqlite3
 
 
@@ -30,7 +30,7 @@ class Database:
         )
 
     def insert_session_info(self, time: str, title: str):
-        """Insert time into apps tabel"""
+        """Insert time and title into apps tabel"""
         try:
             conn.cur.execute(
                 "INSERT INTO apps(time, title) VALUES(?, ?)", [time, title]
@@ -38,7 +38,7 @@ class Database:
             conn.conn.commit()
             print("inserted successfully")
         except sqlite3.Error as e:
-            print(e)
+            print("Error while inserting", e)
 
     def insert_time_calculation_session_info(self, time: datetime, title: str):
         """Insert time calculation data into time_calculation tabel"""
@@ -72,11 +72,11 @@ class Database:
 Db = Database()
 
 
-Db.insert_session_info(datetime(2025, 7, 14, 9, 30, 0), "Maincraft")
-Db.insert_session_info(datetime.now(), "Maincraft")
+# Db.insert_session_info(datetime(2025, 7, 14, 9, 30, 0), "Maincraft")
+# Db.insert_session_info(datetime.now(), "Maincraft")
 
-total_duration = Db.calculate_time_difference()
+# total_duration = Db.calculate_time_difference()
 
-print(f"total_duration: {total_duration}")
+# print(f"total_duration: {total_duration}")
 
 
