@@ -1,6 +1,6 @@
 import flet as ft
 
-class ActivityTrackerUI:
+class ActivityTrackertUI:
     def __init__(self, page: ft.Page):
         self.page = page
         self.page.title = "Activity tracker"

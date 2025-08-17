@@ -1,5 +1,5 @@
 from datetime import datetime
-from .Connection import conn
+from Connection import conn
 import sqlite3
 
 
@@ -72,11 +72,11 @@ class Database:
 Db = Database()
 
 
-# Db.insert_session_info(datetime(2025, 7, 14, 9, 30, 0), "Maincraft")
-# Db.insert_session_info(datetime.now(), "Maincraft")
+Db.insert_time_calculation_session_info(datetime(2025, 7, 14, 9, 30, 0), "Maincraft")
+Db.insert_time_calculation_session_info(datetime.now(), "Maincraft")
 
-# total_duration = Db.calculate_time_difference()
+total_duration = Db.calculate_time_difference()
 
-# print(f"total_duration: {total_duration}")
+print(f"total_duration: {total_duration}")
 
 
