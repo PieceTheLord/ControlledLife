@@ -3,9 +3,10 @@ import threading
 import time
 from datetime import datetime
 from tracker.Tracker import Window  # Assuming this is your Window class
+from api.API import API
 import Window_methods
 from ui.ActivityTrackerUI import ActivityTrackertUI
-from api.API import API
+
 
 class ActivityTracker:
     def __init__(self, page: ft.Page, ui: ActivityTrackertUI):
@@ -36,7 +37,9 @@ class ActivityTracker:
             print(res)
 
         elif self.titles_list[-1] != active_app_title:
-            self.ui.lv.controls.append(ft.Text(f"{self.titles_list[-1]} {self.count_time}"))
+            self.ui.lv.controls.append(
+                ft.Text(f"{self.titles_list[-1]} {self.count_time}")
+            )
             self.titles_list.append(active_app_title)
             res = API.insert_session_info(self.count_time, active_app_title)
             self.count_time = datetime.now()
@@ -47,6 +50,7 @@ class ActivityTracker:
 def main(page: ft.Page):
     ui = ActivityTrackertUI(page)
     tracker = ActivityTracker(page, ui)
+    test = Window_methods.Window_methods(page, tracker)
     tracker.start_tracking()
 
     # test class-decmoposition code block

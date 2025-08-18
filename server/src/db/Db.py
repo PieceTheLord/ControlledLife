@@ -6,8 +6,8 @@ class Database:
     def __init__(self):
         # DO NOT DROP TABLES HERE IN PRODUCTION
         # This is only for development/testing
-        self.conn.self.cur.execute.execute("DROP TABLE IF EXISTS apps")
-        self.conn.self.cur.execute.execute("DROP TABLE IF EXISTS time_calculation")
+        # self.conn.execute.execute("DROP TABLE IF EXISTS apps")
+        # self.conn.execute.execute("DROP TABLE IF EXISTS time_calculation")
         self.conn = sqlite3.connect("apps.db")
         self.cur = self.conn.cursor()
         # Database dev mode updating
