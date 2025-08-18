@@ -1,7 +1,5 @@
 import requests
-import json
 import datetime
-
 
 class clientAPI:
     def __init__(self):
@@ -11,7 +9,7 @@ class clientAPI:
         """
         Send the spent time and app's title to the server, which then go to the SQLite db
         """
-        data = json.dumps({"title": title, "time": time}, default=str)
+        data = {"title": title, "time": time.isoformat()}
         req = requests.post(
             f"{self.url}/insert_session_info",
             json=data,
@@ -21,8 +19,3 @@ class clientAPI:
 
 API = clientAPI()
 
-# req = requests.post(
-#     "http://127.0.0.1:8000/insert_session_info",
-#     json={"title": "Maincraft", "time": str(time.time())},
-# )
-# print(req.json())

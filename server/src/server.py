@@ -40,11 +40,10 @@ async def total_time():
 @app.post("/insert_session_info")
 async def insert_session_info(req: Request, data: SessionInfo):
     reqData = await req.json()
-    print(reqData["time"])
+    spentTime = datetime.datetime.fromisoformat(reqData["time"])
+    print(spentTime, type(spentTime), reqData['time'])
     print(reqData["title"])
-    spentTime = reqData["time"]
-    # x = time.strptime(spentTime, "%H:%M:%S")
     Db.insert_time_calculation_session_info(reqData['time'], reqData["title"])
-    print(Db.calculate_time_difference())
-    print(reqData)
-    return {json.dumps(reqData)}
+    print(Db.get_all_session_info())
+    # Db.insert_session_info("2hour", "title")
+    return {"Hell": "Hell"}

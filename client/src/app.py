@@ -31,15 +31,15 @@ class ActivityTracker:
         if not self.ui.lv.controls:  # Check if list is empty
             self.titles_list.append(active_app_title)
             self.ui.lv.controls.append(ft.Text(f"{active_app_title} {self.count_time}"))
-            self.count_time = datetime.now()
             res = API.insert_session_info(self.count_time, active_app_title)
+            self.count_time = datetime.now()
             print(res)
 
         elif self.titles_list[-1] != active_app_title:
             self.ui.lv.controls.append(ft.Text(f"{self.titles_list[-1]} {self.count_time}"))
             self.titles_list.append(active_app_title)
-            self.count_time = datetime.now()
             res = API.insert_session_info(self.count_time, active_app_title)
+            self.count_time = datetime.now()
             print(res)
             # print("Origin:", self.ui.lv.controls)
 
