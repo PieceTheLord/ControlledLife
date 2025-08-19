@@ -2,10 +2,10 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from .db.Db import Db
 from pydantic import BaseModel
-import json
 import datetime
-import isodate
 from .utils.ISO_parse import ISO_parse
+from .utils.reverse_title import reverse_and_split_title
+
 
 class SessionInfo(BaseModel):
     spentTime: str
@@ -47,11 +47,11 @@ async def insert_session_info(req: Request, data: SessionInfo):
     # print()
     print(data)
     Db.insert_session_info(
-        str(data.spentTime), 
+        data.spentTime, 
         str(data.endTime), 
         str(data.startTime), 
-        str(data.title)
+        reverse_and_split_title(data.title)
     )
-    # print(Db.get_all_session_info())
+    print(Db.get_all_session_info())
     # Db.insert_session_info("2hour", "title")
     return {"Hell": "Hell"}

@@ -58,6 +58,8 @@ class ActivityTracker:
                 )
             )
             self.titles_list.append(active_app_title)
+
+            # Send session data to the server
             res = API.insert_session_info(
                 spentTime=datetime.now().replace(microsecond=0) - self.count_time,
                 startTime=self.count_time,

@@ -81,7 +81,7 @@ class Database:
         """Retrieve all session info from time_calculation table"""
 
         try:
-            self.cur.execute("SELECT * FROM time_calculation")
+            self.cur.execute("SELECT title FROM apps ORDER BY title DESC")
             return self.cur.fetchall()
         except sqlite3.Error as e:
             print("Error at retirieve_all_session_info method, in Db.py ->", e)
