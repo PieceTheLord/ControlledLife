@@ -3,4 +3,7 @@ venv
 __pycache__
 *.excalidraw.png
 *.excalidraw
+./*.excalidraw
 *.db
+**/*.excalidraw.png
+**/*.excalidraw

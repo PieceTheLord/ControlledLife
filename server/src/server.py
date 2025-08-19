@@ -4,10 +4,13 @@ from .db.Db import Db
 from pydantic import BaseModel
 import json
 import datetime
-
+import isodate
+from .utils.ISO_parse import ISO_parse
 
 class SessionInfo(BaseModel):
-    time: datetime.datetime
+    spentTime: str
+    startTime: datetime.datetime
+    endTime: datetime.datetime
     title: str
 
 
@@ -40,10 +43,15 @@ async def total_time():
 @app.post("/insert_session_info")
 async def insert_session_info(req: Request, data: SessionInfo):
     reqData = await req.json()
-    spentTime = datetime.datetime.fromisoformat(reqData["time"])
-    print(spentTime, type(spentTime), reqData['time'])
-    print(reqData["title"])
-    Db.insert_time_calculation_session_info(reqData['time'], reqData["title"])
-    print(Db.get_all_session_info())
+    # spentTime = datetime.datetime.fromisoformat(reqData["time"])
+    # print()
+    print(data)
+    Db.insert_session_info(
+        str(data.spentTime), 
+        str(data.endTime), 
+        str(data.startTime), 
+        str(data.title)
+    )
+    # print(Db.get_all_session_info())
     # Db.insert_session_info("2hour", "title")
     return {"Hell": "Hell"}

@@ -1,32 +1,25 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import sqlite3
 import threading
+
 
 class Database:
     def __init__(self):
         # DO NOT DROP TABLES HERE IN PRODUCTION
         # This is only for development/testing
-        # self.conn.execute.execute("DROP TABLE IF EXISTS apps")
-        # self.conn.execute.execute("DROP TABLE IF EXISTS time_calculation")
         self.conn = sqlite3.connect("apps.db")
         self.cur = self.conn.cursor()
         # Database dev mode updating
         try:
-            self.cur.execute(
+            self.conn.execute("DROP TABLE IF EXISTS apps")
+            self.conn.commit()
+            self.conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS apps (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                time TEXT NOT NULL,
-                title TEXT NOT NULL,
-                date TEXT NOT NULL
-                )
-                """
-            )
-            self.cur.execute(
-                """
-                CREATE TABLE IF NOT EXISTS time_calculation (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                time TEXT NOT NULL,
+                spentTime TEXT NOT NULL,
+                endTime TEXT NOT NULL,
+                startTime TEXT NOT NULL,
                 title TEXT NOT NULL
                 )
                 """
@@ -35,28 +28,33 @@ class Database:
         except sqlite3.Error as e:
             print(f"Error creating tables: {e}")
 
-    def insert_session_info(self, time: str, title: str):
+    def insert_session_info(
+        self, spentTime: timedelta, startTime: datetime, endTime: datetime, title: str
+    ):
         """Insert time and title into apps table"""
         try:
             self.cur.execute(
-                "INSERT INTO apps(time, title, date) VALUES(?, ?, ?)",
-                [time, title, datetime.now().strftime("%Y-%m-%d")],
+                "INSERT INTO apps(spentTime, startTime, endTime, title) VALUES(?, ?, ?, ?)",
+                [spentTime, startTime, endTime, title],
             )
             self.conn.commit()  # Commit the insertion
             print("inserted successfully")
         except sqlite3.Error as e:
             print("Error while inserting", e)
 
-    def insert_time_calculation_session_info(self, time: datetime, title: str):
-        """Insert time calculation data into time_calculation table"""
-        try:
-            self.cur.execute(
-                "INSERT INTO time_calculation(time, title) VALUES(?, ?)", [time, title]
-            )
-            self.conn.commit()  # Commit the insertion
-            print("inserted successfully)")
-        except sqlite3.Error as e:
-            print("Error in insert_time_calculation_session_info method, Db.py ->", e)
+    # def insert_time_calculation_session_info(
+    #     self, spentTime: datetime, endTime: datetime, startTime: datetime, title: str
+    # ):
+    #     """Insert time calculation data into time_calculation table"""
+    #     try:
+    #         self.cur.execute(
+    #             "INSERT INTO time_calculation(spentTime, endTime, startTime title) VALUES(?, ?, ?, ?)",
+    #             [spentTime, endTime, startTime, title],
+    #         )
+    #         self.conn.commit()  # Commit the insertion
+    #         print("inserted successfully)")
+    #     except sqlite3.Error as e:
+    #         print("Error in insert_time_calculation_session_info method, Db.py ->", e)
 
     def calculate_time_difference(self):
         """Calculate the time difference, after process change"""
