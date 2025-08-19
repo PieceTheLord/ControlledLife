@@ -5,14 +5,7 @@ from pydantic import BaseModel
 import datetime
 from .utils.ISO_parse import ISO_parse
 from .utils.reverse_title import reverse_and_split_title
-
-
-class SessionInfo(BaseModel):
-    spentTime: str
-    startTime: datetime.datetime
-    endTime: datetime.datetime
-    title: str
-
+from .models.SessionModel import SessionModel
 
 app = FastAPI()
 
@@ -25,7 +18,6 @@ app.add_middleware(
 )
 
 # Get requests
-
 
 @app.get("/get_last_title")
 async def last_title():
@@ -41,10 +33,8 @@ async def total_time():
 
 
 @app.post("/insert_session_info")
-async def insert_session_info(req: Request, data: SessionInfo):
-    reqData = await req.json()
-    # spentTime = datetime.datetime.fromisoformat(reqData["time"])
-    # print()
+async def insert_session_info(req: Request, data: SessionModel):
+
     print(data)
     Db.insert_session_info(
         data.spentTime, 

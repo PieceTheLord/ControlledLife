@@ -42,37 +42,6 @@ class Database:
         except sqlite3.Error as e:
             print("Error while inserting", e)
 
-    # def insert_time_calculation_session_info(
-    #     self, spentTime: datetime, endTime: datetime, startTime: datetime, title: str
-    # ):
-    #     """Insert time calculation data into time_calculation table"""
-    #     try:
-    #         self.cur.execute(
-    #             "INSERT INTO time_calculation(spentTime, endTime, startTime title) VALUES(?, ?, ?, ?)",
-    #             [spentTime, endTime, startTime, title],
-    #         )
-    #         self.conn.commit()  # Commit the insertion
-    #         print("inserted successfully)")
-    #     except sqlite3.Error as e:
-    #         print("Error in insert_time_calculation_session_info method, Db.py ->", e)
-
-    def calculate_time_difference(self):
-        """Calculate the time difference, after process change"""
-        try:
-
-            self.cur.execute(
-                "SELECT time FROM time_calculation ORDER BY time"
-            )  # Ensure times are ordered
-            times = self.cur.fetchall()
-            if not times or len(times) < 2:
-                return None
-            return datetime.fromisoformat(times[-1][0]) - datetime.fromisoformat(
-                times[0][0]
-            )
-        except sqlite3.Error as e:
-            print(f"Error at class: Db method: calculate_time_difference -> {e}")
-            return None  # Added return None in case of exception
-
     def insert_session_time():
         """#TODO: Implement this method or remove"""
         pass
