@@ -30,12 +30,11 @@ class ActivityTracker:
         active_app_title: str = Window.get_active_title()
 
         # Check if list is empty
-        if not self.ui.lv.controls:
+        if not self.titles_list:
             # Add a new app's title to ui and list for condition rendering
-            self.titles_list.append(active_app_title)
             self.ui.lv.controls.append(
                 ft.Text(
-                    f"{active_app_title} {datetime.now() - self.count_time.replace(microsecond=0)}"
+                    f"{active_app_title} {datetime.now().replace(microsecond=0) - self.count_time}"
                 )
             )
             res = API.insert_session_info(
@@ -44,12 +43,13 @@ class ActivityTracker:
                 endTime=datetime.now().replace(microsecond=0),
                 title=active_app_title,
             )
+            self.titles_list.append(active_app_title)
 
             # Update counter and print response
             self.count_time = datetime.now().replace(microsecond=0)
             print(res)
 
-        elif self.titles_list[-1] != active_app_title:
+        if self.titles_list[-1] != active_app_title:
 
             # Add a new app's title to the ui and list for condition rendering
             self.ui.lv.controls.append(
@@ -57,15 +57,15 @@ class ActivityTracker:
                     f"{self.titles_list[-1]} {datetime.now().replace(microsecond=0) - self.count_time}"
                 )
             )
-            self.titles_list.append(active_app_title)
 
             # Send session data to the server
             res = API.insert_session_info(
                 spentTime=datetime.now().replace(microsecond=0) - self.count_time,
                 startTime=self.count_time,
                 endTime=datetime.now().replace(microsecond=0),
-                title=active_app_title,
+                title=self.titles_list[-1],
             )
+            self.titles_list.append(active_app_title)
 
             # Update counter and update response
             self.count_time = datetime.now().replace(microsecond=0)
@@ -75,7 +75,6 @@ class ActivityTracker:
 def main(page: ft.Page):
     ui = ActivityTrackertUI(page)
     tracker = ActivityTracker(page, ui)
-    test = Window_methods.Window_methods(page, tracker)
     tracker.start_tracking()
 
     # test class-decmoposition code block

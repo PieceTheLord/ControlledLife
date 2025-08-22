@@ -18,7 +18,7 @@ class clientAPI:
         """
         data = {
             "title": title,
-            "spentTime": serialize_timedelta(spentTime),
+            "spentTime": spentTime.total_seconds(),
             "startTime": startTime.isoformat(),
             "endTime": endTime.isoformat()
         }
