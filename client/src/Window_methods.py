@@ -18,6 +18,6 @@ class Window_methods(app.ActivityTracker):
         while True:
             time.sleep(1)
             try:
-                print(self.ui.lv.controls)
+                print(self.ui.apps_info.controls)
             except Exception as e:
                 print("Occured an errro ->", e)

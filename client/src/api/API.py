@@ -1,6 +1,8 @@
 import requests
 import datetime
 from utils.serialize_timedelta import serialize_timedelta
+import json
+
 
 class clientAPI:
     def __init__(self):
@@ -20,12 +22,18 @@ class clientAPI:
             "title": title,
             "spentTime": spentTime.total_seconds(),
             "startTime": startTime.isoformat(),
-            "endTime": endTime.isoformat()
+            "endTime": endTime.isoformat(),
         }
         req = requests.post(
             f"{self.url}/insert_session_info",
             json=data,
         )
+        return req.json()
+
+    def get_last_session(self):
+        req = requests.get(f"{self.url}/get_last_session")
+        req.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
+        print(f"req -> {req.json()}")
         return req.json()
 
 

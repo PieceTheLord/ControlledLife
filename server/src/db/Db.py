@@ -12,8 +12,8 @@ class Database:
         # Database dev mode updating
         try:
             #! Remove table drop in prod!!!
-            self.conn.execute("DROP TABLE IF EXISTS apps")
-            self.conn.commit()
+            # self.conn.execute("DROP TABLE IF EXISTS apps")
+            # self.conn.commit()
             self.conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS apps (
@@ -71,6 +71,15 @@ class Database:
                 print(e)
         else:
             raise Exception("No parameters provided")
+
+    def get_last_session(self):
+        """Retrieve the last session info from the database"""
+
+        try:
+            self.cur.execute("SELECT * FROM apps ORDER BY id DESC LIMIT 1")
+            return self.cur.fetchall()
+        except sqlite3.Error as e:
+            print(f"Error in Db.py at get_last_session -> {e}")
 
 
 Db = Database()
