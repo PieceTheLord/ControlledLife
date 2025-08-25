@@ -1,9 +1,12 @@
 import flet as ft
 
+
 class State:
     toggle = True
 
+
 s = State()
+
 
 class ActivityTrackertUI:
     def __init__(self, page: ft.Page):
@@ -17,6 +20,42 @@ class ActivityTrackertUI:
         self.ui.apps_info.controls.append(ft.Text(f"{title} {time_elapsed}"))
         self.self.page.update()
 
+        mainTitleButton = ft.IconButton(
+            icon=(
+                ft.Icons.ARROW_UPWARD_SHARP
+                if states["mainTitle_expanded"]
+                else ft.Icons.ARROW_DOWNWARD_SHARP
+            ),
+            on_click=toggle_mainTitle,
+        )
+
+        content = ft.Row(
+            [
+                ft.Column(
+                    [
+                        ft.Row(
+                            [
+                                mainTitleButton,
+                                ft.Row([ft.Text(menu_data["mainTitle"])]),
+                            ]
+                        )
+                    ]
+                ),
+            ]
+        )
+
+        def update_menu():
+            mainTitleButton.icon = (
+                ft.Icons.ARROW_UPWARD_SHARP
+                if states["mainTitle_expanded"]
+                else ft.Icons.ARROW_DOWNWARD_SHARP
+            )
+            content.update()
+
+        page.add(content)
+        update_menu()
+
+    # Line Chart #TODO: This is needs to be done
     def add_chart(self):
         data_1 = [
             ft.LineChartData(
@@ -111,7 +150,9 @@ class ActivityTrackertUI:
         chart = ft.LineChart(
             data_series=data_1,
             border=ft.Border(
-                bottom=ft.BorderSide(4, ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE))
+                bottom=ft.BorderSide(
+                    4, ft.Colors.with_opacity(0.5, ft.Colors.ON_SURFACE)
+                )
             ),
             left_axis=ft.ChartAxis(
                 labels=[

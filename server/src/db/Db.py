@@ -12,8 +12,8 @@ class Database:
         # Database dev mode updating
         try:
             #! Remove table drop in prod!!!
-            # self.conn.execute("DROP TABLE IF EXISTS apps")
-            # self.conn.commit()
+            self.conn.execute("DROP TABLE IF EXISTS apps")
+            self.conn.commit()
             self.conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS apps (
@@ -55,7 +55,7 @@ class Database:
         """Retrieve all session info from time_calculation table"""
 
         try:
-            self.cur.execute("SELECT * FROM apps ORDER BY mainTitle DESC")
+            self.cur.execute("SELECT * FROM apps ORDER BY mainTitle ")
             return self.cur.fetchall()
         except sqlite3.Error as e:
             print("Error at retirieve_all_session_info method, in Db.py ->", e)

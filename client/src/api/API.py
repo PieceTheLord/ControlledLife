@@ -33,7 +33,13 @@ class clientAPI:
     def get_last_session(self):
         req = requests.get(f"{self.url}/get_last_session")
         req.raise_for_status()  # Raise HTTPError for bad responses (4xx or 5xx)
-        print(f"req -> {req.json()}")
+        print(f"Last session from API.py -> {req.json()}")
+        return req.json()
+    
+    def get_all_session(self):
+        req = requests.get(f"{self.url}/get_all_sessions")
+        req.raise_for_status()
+        print(f"All sessions from API.py -> {req.json()}")
         return req.json()
 
 
