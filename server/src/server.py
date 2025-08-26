@@ -45,7 +45,7 @@ async def last_title():
         mainTitle, subtitle1, subtitle2, endTime, startTime, spentTime
     ).to_dict()
 
-    print("Last session time tree :",last_session_time_tree)
+    print("Last session time tree :", last_session_time_tree)
 
     return last_session_time_tree
 
@@ -61,6 +61,12 @@ async def total_time():
         all_sessions.append(session_data)
     print("All sessions =>", all_sessions)
     return all_sessions
+
+
+@app.get("/get_total_spent_time")
+async def total_time():
+    total_spent_time = Db.calculate_total_sepnt_time()
+    return total_spent_time
 
 
 # Post requests

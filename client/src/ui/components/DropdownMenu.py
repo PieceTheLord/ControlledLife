@@ -37,22 +37,16 @@ class DropdownMenu:
         )
         self.lastTitle = (
             ft.Row(
-                spacing=ft.padding.only(left=100),
-                controls=(
-                    (
-                        [
-                            ft.Text(self.menu_data["subtitle1"]["subtitle2"]["title"]),
-                        ]
-                    ),
-                ),
+                [
+                    ft.Text(self.menu_data["subtitle1"]["subtitle2"]["title"]),
+                ]
             )
             if self.states["subtitle_expanded"]
             else ft.Row([])
         )
         self.subtitle = (
             ft.Row(
-                spacing=ft.padding.only(left=100),
-                controls=[
+                [
                     self.subtitleButton,
                     ft.Text(self.menu_data["subtitle1"]["title"]),
                 ],
@@ -79,7 +73,7 @@ class DropdownMenu:
     def toggle_mainTitle(self, e):
         if self.states["mainTitle_expanded"] == True:
             self.states["mainTitle_expanded"] = False
-            self.states["subtitle_expanded"] = True
+            self.states["subtitle_expanded"] = not self.states["subtitle_expanded"]
         elif self.check_mainTitle():
             self.states["mainTitle_expanded"] = not self.states["mainTitle_expanded"]
         # Rebuild IconButton, because self.content update doesn't rebuild the page based on code
@@ -93,13 +87,10 @@ class DropdownMenu:
         self.subtitle.controls = [
             (
                 ft.Row(
-                    spacing=ft.padding.only(left=40),
-                    controls=(
-                        [
-                            self.subtitleButton,
-                            ft.Text(self.menu_data["subtitle1"]["title"]),
-                        ]
-                    ),
+                    [
+                        self.subtitleButton,
+                        ft.Text(self.menu_data["subtitle1"]["title"]),
+                    ]
                 )
                 if self.states["mainTitle_expanded"]
                 else ft.Row([])

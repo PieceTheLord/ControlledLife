@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import sqlite3
-import threading
 
 
 class Database:
@@ -80,6 +79,20 @@ class Database:
             return self.cur.fetchall()
         except sqlite3.Error as e:
             print(f"Error in Db.py at get_last_session -> {e}")
+
+    def calculate_total_sepnt_time(self):
+        """Calculate the total spent time for each mainTitle, subtitle1, and subtitle2"""
+
+        try:
+            self.cur.execute(
+                """
+                SELECT mainTitle, subtitle1, subtitle2, SUM(spentTime) FROM apps 
+                GROUP BY mainTitle, subtitle1, subtitle2
+                """
+            )
+            return self.cur.fetchall()    
+        except sqlite3.Error as e:
+            print(f"Error in Db.py at calculate_total_sepnt_time -> {e}")
 
 
 Db = Database()
