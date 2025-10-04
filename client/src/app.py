@@ -27,7 +27,7 @@ class ActivityTracker:
             self.page.update()
 
     def add_active_window_title(self):
-        active_app_title: str = Window.get_active_title()
+        active_app_title: str = Window.get_active_app()
         # Check if list is empty
         if not self.titles_list:
             # Add a new app's title to ui and list for condition rendering
@@ -75,47 +75,6 @@ def main(page: ft.Page):
     tracker = ActivityTracker(page, ui)
     tracker.start_tracking()
     # Initialize the menu data structure
-
-<<<<<<< HEAD
-    menu_data = API.get_last_session()  # Corrected initialization
-    print("menu_data ->", menu_data)
-    # Expansion states dictionary
-    print(menu_data, sep="\n")
-=======
-    # Create the list of our tracking apps' title
-    lv = ft.ListView(expand=1, padding=20, spacing=10, auto_scroll=True)
-    page.title = "Activity tracker"
-    timer_running = True
-    count_time = datetime.now()
-
-
-    def update_timer():
-        while timer_running:
-            time.sleep(1)
-            add_active_window_title()
-            page.update()
-
-    def add_active_window_title():
-        nonlocal count_time
-        app_title = Window.get_active_app()
-        if (len(lv.controls) == 0):
-            current_time = datetime.now() - count_time
-            lv.controls.append(ft.Text(app_title))   
-            print(app_title, current_time)
-            count_time = datetime.now()
-        elif (lv.controls[-1].value != app_title):
-            current_time = datetime.now() - count_time
-            lv.controls.append(ft.Text(app_title))
-            print(lv.controls[-2].value, current_time)
-            count_time = datetime.now()
-        else:
-            pass
-        
-    page.add(lv)
-
-    timer_thread = threading.Thread(target=update_timer, daemon=True)
-    timer_thread.start()
->>>>>>> 0a51e5a2ef0724a6320866d08a2581e0b51640a7
 
     page.update()
 
