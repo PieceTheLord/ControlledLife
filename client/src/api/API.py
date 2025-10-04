@@ -41,6 +41,12 @@ class clientAPI:
         req.raise_for_status()
         print(f"All sessions from API.py -> {req.json()}")
         return req.json()
+    
+    def get_total_spent_time(self):
+        req = requests.get(f"{self.url}/get_total_spent_time")
+        req.raise_for_status()
+        print(f"Total spent time from API.py -> {req.json()}")
+        return req.json()
 
 
 API = clientAPI()

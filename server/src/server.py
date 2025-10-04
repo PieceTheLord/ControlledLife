@@ -1,13 +1,14 @@
+from collections import defaultdict
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+
+from .utils.time_tree_converter import time_tree_converter
 from .db.Db import Db
 from .utils.reverse_title import reverse_and_split_title
 from .models.SessionModel import SessionModel
 from .models.SessionData import SessionData
 
 app = FastAPI()
-time_tree = []
-
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,7 +22,7 @@ app.add_middleware(
 
 
 @app.get("/get_last_session")
-async def last_title():
+async def get_last_session():
     last_session = Db.get_last_session()
 
     if not last_session:
@@ -37,9 +38,9 @@ async def last_title():
             },
         }
 
-    for i in last_session:
-        id, spentTime, endTime, startTime, mainTitle, subtitle1, subtitle2 = i
-    print(id, spentTime, endTime, startTime, mainTitle, subtitle1, subtitle2)
+    for session in last_session:
+        mainTitle, subtitle1, subtitle2, endTime, startTime, spentTime  = session
+    print(spentTime, endTime, startTime, mainTitle, subtitle1, subtitle2)
 
     last_session_time_tree = SessionData(
         mainTitle, subtitle1, subtitle2, endTime, startTime, spentTime
@@ -51,7 +52,7 @@ async def last_title():
 
 
 @app.get("/get_all_sessions")
-async def total_time():
+async def get_all_sessions():
     all_sessions_info: list = Db.get_all_session_info()
     all_sessions: list[SessionData] = []
     for session in all_sessions_info:
@@ -64,9 +65,14 @@ async def total_time():
 
 
 @app.get("/get_total_spent_time")
-async def total_time():
-    total_spent_time = Db.calculate_total_sepnt_time()
-    return total_spent_time
+async def get_total_spent_time():
+    sessions = Db.calculate_total_spent_time()
+    time_tree = time_tree_converter(sessions)
+
+    # Convert defaultdict to dict for easier readability
+    
+    return time_tree
+
 
 
 # Post requests
@@ -83,11 +89,11 @@ async def insert_session_info(req: Request, data: SessionModel):
     mainTitle = title_parts[0]
     subtitle1 = title_parts[1]
     subtitle2 = title_parts[2]
-
+    import json
     Db.insert_session_info(
         data.spentTime,
-        str(data.endTime),
         str(data.startTime),
+        str(data.endTime),
         mainTitle,
         subtitle1,
         subtitle2,
@@ -95,26 +101,7 @@ async def insert_session_info(req: Request, data: SessionModel):
     all_sessions = Db.get_all_session_info()
     global time_tree  # Access the global time_tree
     last_session = Db.get_last_session()
+    print(last_session)
+    time_tree = time_tree_converter(last_session)
 
-    for i in all_sessions:
-        # print("Itme ->", i)
-        id, spentTime, endTime, startTime, mainTitle, subtitle1, subtitle2 = i
-
-        time_tree.append(
-            {
-                "mainTitle": mainTitle,
-                "subtitle1": {
-                    "title": subtitle1,
-                    "subtitle2": {
-                        "title": subtitle2,
-                        "endTime": endTime,
-                        "startTime": startTime,
-                    },
-                },
-            }
-        )
-
-    print("Time Tree -> ")
-    print(time_tree[-1], sep="\n")
-
-    return {"data": time_tree[-1]}
+    return time_tree

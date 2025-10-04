@@ -2,10 +2,10 @@ import flet as ft
 import threading
 import time
 from datetime import datetime
+from ui.components.DropdownMenu.DropdownMenu import DropdownMenu
 from tracker.Tracker import Window  # Assuming this is your Window class
 from api.API import API
 from ui.ActivityTrackerUI import ActivityTrackertUI
-from ui.components.DropdownMenu import DropdownMenu
 
 
 class ActivityTracker:
@@ -28,7 +28,6 @@ class ActivityTracker:
 
     def add_active_window_title(self):
         active_app_title: str = Window.get_active_title()
-
         # Check if list is empty
         if not self.titles_list:
             # Add a new app's title to ui and list for condition rendering
@@ -39,15 +38,16 @@ class ActivityTracker:
                 title=active_app_title,
             )
             self.titles_list.append(active_app_title)
-            all_session = API.get_all_session()
+            time_tree = API.get_total_spent_time()
+            for title, title_data in time_tree.items():
+                print("title, title_data:", title, title_data, sep="\n")
 
-            for i in range(len(all_session)):
-                dropdown_menu = DropdownMenu(all_session[i])
+                dropdown_menu = DropdownMenu(title=title, session=title_data)
                 self.ui.apps_info.controls.append(dropdown_menu.content)
-                
+ 
+            print("dropdown-menu", type(dropdown_menu.content))
             # Update counter and print response
             self.count_time = datetime.now().replace(microsecond=0)
-            print(res)
 
         if self.titles_list[-1] != active_app_title:
 
@@ -60,8 +60,9 @@ class ActivityTracker:
                 endTime=datetime.now().replace(microsecond=0),
                 title=self.titles_list[-1],
             )
-            dropdown_menu = DropdownMenu(res["data"])
-            print(res)
+            for title, title_data in res.items():
+                dropdown_menu = DropdownMenu(title=title, session=title_data)
+            
             self.ui.apps_info.controls.append(dropdown_menu.content)
 
             self.titles_list.append(active_app_title)
