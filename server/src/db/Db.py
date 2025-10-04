@@ -1,0 +1,115 @@
+from datetime import datetime, timedelta
+import sqlite3
+
+
+class Database:
+    def __init__(self):
+        # DO NOT DROP TABLES HERE IN PRODUCTION
+        # This is only for development/testing
+        self.conn = sqlite3.connect("apps.db")
+        self.cur = self.conn.cursor()
+        # Database dev mode updating
+        try:
+            #! Remove table drop in prod!!!
+            # self.conn.execute("DROP TABLE IF EXISTS apps")
+            # self.conn.commit()
+            self.conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS apps (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                spentTime REAL NOT NULL,
+                endTime TEXT NOT NULL,
+                startTime TEXT NOT NULL,
+                mainTitle TEXT NOT NULL,
+                subtitle1 TEXT NOT NULL,
+                subtitle2 TEXT NOT NULL
+                )
+                """
+            )
+            self.conn.commit()  # Commit the table creation
+        except sqlite3.Error as e:
+            print(f"Error creating tables: {e}")
+
+    def insert_session_info(
+        self,
+        spentTime: timedelta,
+        startTime: datetime,
+        endTime: datetime,
+        mainTitle: str,
+        subtitle1: str,
+        subtitle2: str,
+    ):
+        """Insert time and title into apps table"""
+        try:
+            self.cur.execute(
+                "INSERT INTO apps(spentTime, startTime, endTime, mainTitle, subtitle1, subtitle2) VALUES(?, ?, ?, ?, ?, ?)",
+                [spentTime, startTime, endTime, mainTitle, subtitle1, subtitle2],
+            )
+            self.conn.commit()  # Commit the insertion
+            print("inserted successfully")
+        except sqlite3.Error as e:
+            print("Error while inserting", e)
+
+    def get_all_session_info(self) -> list[tuple[str, str, str, str, str, str]]:
+        """Retrieve all session info from time_calculation table"""
+
+        try:
+            self.cur.execute("SELECT * FROM apps ORDER BY mainTitle ")
+            return self.cur.fetchall()
+        except sqlite3.Error as e:
+            print("Error at retirieve_all_session_info method, in Db.py ->", e)
+
+    def get_session_info_by_id(self, params: list = None):
+        """Retrieve session info by id"""
+
+        if params is not None:
+            try:
+                self.cur.execute("SELECT * FROM apps WHERE id = ?", params)
+                return self.cur.fetchall()
+            except sqlite3.Error as e:
+                print(e)
+        else:
+            raise Exception("No parameters provided")
+
+    def get_last_session(self):
+        """Retrieve the last session info from the database"""
+
+        try:
+            self.cur.execute(
+                "SELECT mainTitle, subtitle1, subtitle2, startTime, endTime, spentTime FROM apps ORDER BY id DESC LIMIT 1"
+            )
+            return self.cur.fetchall()
+        except sqlite3.Error as e:
+            print(f"Error in Db.py at get_last_session -> {e}")
+
+    def calculate_total_spent_time(self):
+        '''Retrieve all rows ordered by "mainTitle"'''
+
+        try:
+            sessions = self.cur.execute(
+                "SELECT mainTitle, subtitle1, subtitle2, startTime, endTime, spentTime FROM apps ORDER BY mainTitle"
+            ).fetchall()
+            return sessions
+        except sqlite3.Error as e:
+            print(f"Error in Db.py at calculate_each_spent_time -> {e}")
+
+    def calculate_each_spent_time(self):
+        """Calculate the total spent time for each mainTitle, subtitle1, and subtitle2"""
+
+        try:
+            self.cur.execute(
+                """
+                SELECT 
+                     "mainTitle", "subtitle1", "subtitle2", SUM(spentTime)
+                FROM apps 
+                GROUP BY mainTitle, subtitle1, subtitle2 
+                """
+            )
+            return self.cur.fetchall()
+        except sqlite3.Error as e:
+            print(f"Error in Db.py at calculate_total_sepnt_time -> {e}")
+
+
+Db = Database()
+
+# print(Db.calculate_total_sepnt_time())
