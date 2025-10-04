@@ -1,4 +1,5 @@
 import requests
+<<<<<<< HEAD
 import datetime
 from utils.serialize_timedelta import serialize_timedelta
 import json
@@ -50,3 +51,20 @@ class clientAPI:
 
 
 API = clientAPI()
+=======
+
+class clientAPI:
+  
+  
+  def __init__(self):
+    self.URL = "http://127.0.0.1:8000"
+  
+  def insert_new_session_info(self, title):
+    """Insert a new window's title to the db"""
+    requests.post(self.URL + "/insert_session_info", data={title})
+
+
+cAPI = clientAPI()
+
+cAPI.insert_new_session_info("test")
+>>>>>>> 0a51e5a2ef0724a6320866d08a2581e0b51640a7
