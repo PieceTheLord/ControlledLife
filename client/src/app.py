@@ -45,7 +45,6 @@ class ActivityTracker:
                 dropdown_menu = DropdownMenu(title=title, session=title_data)
                 self.ui.apps_info.controls.append(dropdown_menu.content)
  
-            print("dropdown-menu", type(dropdown_menu.content))
             # Update counter and print response
             self.count_time = datetime.now().replace(microsecond=0)
 
@@ -60,10 +59,10 @@ class ActivityTracker:
                 endTime=datetime.now().replace(microsecond=0),
                 title=self.titles_list[-1],
             )
-            for title, title_data in res.items():
-                dropdown_menu = DropdownMenu(title=title, session=title_data)
+            # for title, title_data in res.items():
+            #     dropdown_menu = DropdownMenu(title=title, session=title_data)
             
-            self.ui.apps_info.controls.append(dropdown_menu.content)
+            # self.ui.apps_info.controls.append(dropdown_menu.content)
 
             self.titles_list.append(active_app_title)
             # Update counter and update response

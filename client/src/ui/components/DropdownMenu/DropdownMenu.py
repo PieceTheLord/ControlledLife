@@ -8,7 +8,6 @@ class DropdownMenu:
 
         self.states = {"mainTitle_expanded": False}
         self.title = title
-        self.menu_data = session
 
         self.mainTitleButton = ft.IconButton(
             icon=(
@@ -18,7 +17,17 @@ class DropdownMenu:
             ),
             on_click=self.toggle_mainTitle,
         )
-        self.content = ft.Row([self.mainTitleButton, ft.Text(self.title)])
+        self.subDropdown_menu = SubdropdownMenu(session=session)
+        self.content = ft.Column(
+            [
+                ft.Row([self.mainTitleButton, ft.Text(self.title)]),
+                
+                    self.subDropdown_menu.content
+                    if self.states["mainTitle_expanded"]
+                    else ft.Row([])
+                
+            ]
+        )
 
     def toggle_mainTitle(self, e):
         self.states["mainTitle_expanded"] = not self.states["mainTitle_expanded"]
@@ -27,7 +36,19 @@ class DropdownMenu:
             if self.states["mainTitle_expanded"]
             else ft.Icons.ARROW_DOWNWARD_SHARP
         )
+        self.content.controls = [
+            ft.Row([self.mainTitleButton, ft.Text(self.title)]),
+            (
+                self.subDropdown_menu.content
+                if self.states["mainTitle_expanded"]
+                else ft.Row([])
+            ),
+        ]
+
         self.update_menu()
+
+    def update_menu(self):
+        self.content.update()
 
     #     self.states = {"mainTitle_expanded": False}
     #     self.menu_data = session
@@ -115,7 +136,3 @@ class DropdownMenu:
     #         )
     #     ]
     #     self.update_menu()
-
-    def update_menu(self):
-
-        self.content.update()
